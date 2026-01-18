@@ -55,3 +55,44 @@ export const getNoteById = (req, res) => {
 		message: 'Catatan tidak ditemukan'
 	});
 };
+
+export const editNoteById = (req, res) => {
+	const { id } = req.params;
+	const {title, tags, body} = req.body;
+	const updatedAt = new Date().toISOString();
+	const index = notes.findIndex((n) => n.id === id);
+	
+	if (index !== -1) {
+		notes[index] = {...notes[index], title, tags, body, updatedAt};
+		return res.json({
+			status: 'success',
+			message: 'Catatan berhasil diperbarui'
+		});
+	}
+	
+	return res.status(404).json({
+		status: 'fail',
+		message: 'Gagaal memperbarui catatan. Id tidak ditemukan'
+	});
+	
+	
+};
+
+export const deleteNoteById = (req, res) => {
+	const {id} = req.params;
+	const index = notes.findIndex((n) => n.id === id);
+	
+	if (index !== -1) {
+		notes.splice(index, 1);
+		return res.json({
+			status: 'success',
+			message: 'Catatan berhasil dihapus'
+		});
+	}
+	
+	return res.status(404).json({
+		status: 'fail',
+		message: 'Catatan gagal dihapys. Id tidak ditemukan'
+	});
+	
+};
